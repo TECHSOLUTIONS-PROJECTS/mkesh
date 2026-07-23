@@ -1,0 +1,37 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # O composer.json declara php ^8.1 — testamos as tres versoes
+        # suportadas para que essa promessa nao se quebre em silencio.
+        php: ['8.1', '8.2', '8.3']
+
+    name: PHP ${{ matrix.php }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, libxml
+          coverage: none
+
+      - name: Validar composer.json
+        run: composer validate --strict --no-check-lock
+
+      - name: Instalar dependencias
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Testes
+        run: composer test

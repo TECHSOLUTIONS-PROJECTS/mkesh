@@ -1,0 +1,11 @@
+/vendor/
+# Uma biblioteca não versiona o lock: quem manda são os constraints do
+# composer.json, e o lock da aplicação é que decide as versões instaladas.
+/composer.lock
+/.phpunit.cache/
+/.phpunit.result.cache
+/.claude/
+.idea/
+.vscode/
+*.log
+.env

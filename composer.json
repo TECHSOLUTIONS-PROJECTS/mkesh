@@ -1,0 +1,64 @@
+{
+    "name": "brilliantmind/mkesh",
+    "description": "PHP package for the MKESH (PagamKesh) mobile money integration over the Ericsson EWP Aggregator (XML over HTTP), with first-class Laravel support.",
+    "keywords": ["mkesh", "pagamkesh", "mobile-money", "ericsson", "ewp", "mozambique", "payments", "laravel"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "BrilliantMind",
+            "email": "it@brilliantmind.co.mz"
+        },
+        {
+            "name": "Osvaldo Geraldo",
+            "email": "osvaldogeraldo34@gmail.com"
+        }
+    ],
+    "support": {
+        "email": "it@brilliantmind.co.mz"
+    },
+    "require": {
+        "php": "^8.1",
+        "ext-dom": "*",
+        "ext-libxml": "*",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.1 || ^2.0",
+        "guzzlehttp/guzzle": "^7.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5 || ^11.0",
+        "illuminate/support": "^10.0 || ^11.0 || ^12.0"
+    },
+    "suggest": {
+        "illuminate/support": "Required to use the Laravel ServiceProvider and Mkesh facade."
+    },
+    "autoload": {
+        "psr-4": {
+            "BrilliantMind\\Mkesh\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BrilliantMind\\Mkesh\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BrilliantMind\\Mkesh\\Laravel\\MkeshServiceProvider"
+            ],
+            "aliases": {
+                "Mkesh": "BrilliantMind\\Mkesh\\Laravel\\Facades\\Mkesh"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

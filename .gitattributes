@@ -1,0 +1,21 @@
+# Normalizar fins de linha no repositório.
+* text=auto eol=lf
+
+*.php   text diff=php
+*.md    text
+*.json  text
+*.xml   text
+
+# Nada disto precisa de ir no tarball que o Composer instala nas aplicações.
+/.github            export-ignore
+/.claude            export-ignore
+/tests              export-ignore
+/.phpunit.cache     export-ignore
+/.gitattributes     export-ignore
+/.gitignore         export-ignore
+/phpunit.xml        export-ignore
+/CHANGELOG.md       export-ignore
+
+# examples/ e .env.example ficam DE PROPÓSITO no dist: o README manda copiar
+# esses ficheiros para a aplicação, e eles têm de existir em
+# vendor/brilliantmind/mkesh/ para isso ser possível.
