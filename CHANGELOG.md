@@ -7,22 +7,6 @@ versionamento segue [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
-### Alterado
-
-- As tabelas `mkesh_transactions` e `mkesh_responses` passam a usar **UUID como
-  chave primária** (`$table->uuid('id')->primary()`), e a ligação entre elas é
-  agora uma `foreignUuid`. Os models de exemplo usam o trait `HasUuids` e o job
-  `ReconcileMkeshTransaction` recebe o id como `string`.
-- Documentação e fixtures deixam de usar `MTL` como prefixo de exemplo. O
-  placeholder passa a ser `ACME`, deixando claro que o token de parceiro é
-  atribuído pelo provedor no onboarding.
-
-### Adicionado
-
-- Secção 3.5 do README, "O prefixo de transacção em detalhe": o que é o token,
-  onde o obter, exemplos de `applyPrefix()` e `newTransactionId()`, e o
-  comportamento quando não há prefixo configurado.
-
 ## [1.0.0] — 2026-07-23
 
 Primeira versão pública, alinhada com a folha de integração do agregador EWP e
@@ -51,11 +35,16 @@ o diagrama "C2B Flow" do provedor.
 - Auto-discovery do `MkeshServiceProvider` e da facade `Mkesh`
 - Configuração publicável (`--tag=mkesh-config`)
 - Migrations `mkesh_transactions` e `mkesh_responses`, executadas directamente
-  ou publicáveis (`--tag=mkesh-migrations`)
-- Exemplos prontos a copiar: model, serviço, controller de callback e job de
-  reconciliação
+  ou publicáveis (`--tag=mkesh-migrations`), ambas com **UUID como chave
+  primária** e a ligação entre elas como `foreignUuid`
+- Exemplos prontos a copiar: model (com o trait `HasUuids`), serviço, controller
+  de callback e job de reconciliação
 
 ### Notas de integração
+
+- O prefixo de transacção é o token de parceiro atribuído pelo provedor no
+  onboarding. Na documentação e nos fixtures aparece como `ACME`, que é apenas
+  um placeholder — ver a secção 3.5 do README.
 
 - O `referenceid` passa a ser sempre enviado, assumindo por omissão o valor do
   `externaltransactionid` — é por ele que a consulta de estado procura a
