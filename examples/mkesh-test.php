@@ -43,7 +43,8 @@ $CONFIG = [
     // Vazio = usa a service_provider_fri acima.
     'sp_transfer_sending_fri' => getenv('MKESH_SP_TRANSFER_FRI') ?: null,
 
-    // Prefixo obrigatório nos ids (ex.: 'MTL'). O SDK aplica-o automaticamente.
+    // Token de parceiro exigido no inicio de todos os ids. Dado pelo provedor
+    // no onboarding ('ACME' e so um placeholder). O SDK aplica-o sozinho.
     'transaction_prefix'   => getenv('MKESH_TRANSACTION_PREFIX') ?: '',
     'base_url'             => getenv('MKESH_BASE_URL') ?: 'https://41.220.193.151',
     'default_currency'     => getenv('MKESH_CURRENCY') ?: 'MZN',
@@ -126,7 +127,7 @@ try {
 
     if ($config->transactionPrefix === null || $config->transactionPrefix === '') {
         fwrite(STDERR, "AVISO: MKESH_TRANSACTION_PREFIX está vazio. O agregador exige que\n");
-        fwrite(STDERR, "       os ids comecem pelo prefixo do parceiro (ex.: MTL).\n\n");
+        fwrite(STDERR, "       os ids comecem pelo token de parceiro que lhe atribuiram.\n\n");
     }
 
     switch ($mode) {

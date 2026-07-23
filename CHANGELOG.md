@@ -13,11 +13,20 @@ versionamento segue [SemVer](https://semver.org/lang/pt-BR/).
   chave primária** (`$table->uuid('id')->primary()`), e a ligação entre elas é
   agora uma `foreignUuid`. Os models de exemplo usam o trait `HasUuids` e o job
   `ReconcileMkeshTransaction` recebe o id como `string`.
+- Documentação e fixtures deixam de usar `MTL` como prefixo de exemplo. O
+  placeholder passa a ser `ACME`, deixando claro que o token de parceiro é
+  atribuído pelo provedor no onboarding.
+
+### Adicionado
+
+- Secção 3.5 do README, "O prefixo de transacção em detalhe": o que é o token,
+  onde o obter, exemplos de `applyPrefix()` e `newTransactionId()`, e o
+  comportamento quando não há prefixo configurado.
 
 ## [1.0.0] — 2026-07-23
 
-Primeira versão pública, alinhada com a folha de integração
-"Integration MTL_EWP_Agregator" e o diagrama "C2B Flow" do provedor.
+Primeira versão pública, alinhada com a folha de integração do agregador EWP e
+o diagrama "C2B Flow" do provedor.
 
 ### Operações
 

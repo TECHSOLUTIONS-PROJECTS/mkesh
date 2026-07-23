@@ -16,19 +16,22 @@ use TechSolutions\Mkesh\ValueObject\Fri;
 use TechSolutions\Mkesh\ValueObject\Money;
 
 /**
- * Parses the verbatim payloads from the provider's "Integration MTL_EWP
- * Agregator" sheet, so a change in the SDK that breaks the documented wire
- * format fails here.
+ * Parses the verbatim payloads from the provider's EWP aggregator integration
+ * sheet, so a change in the SDK that breaks the documented wire format fails
+ * here.
+ *
+ * "ACME" is the partner prefix placeholder used across the docs and fixtures;
+ * the real token is assigned per service provider at onboarding.
  */
 final class IntegrationSheetTest extends TestCase
 {
     private function config(): MkeshConfig
     {
         return new MkeshConfig(
-            username: 'MTL',
+            username: 'ACME',
             password: 'secret',
             serviceProviderFri: 'FRI:pagamKesh/USER',
-            transactionPrefix: 'MTL',
+            transactionPrefix: 'ACME',
         );
     }
 
@@ -70,14 +73,14 @@ final class IntegrationSheetTest extends TestCase
             <ns0:gettransactionstatusresponse xmlns:ns0="http://www.ericsson.com/em/emm/financial/v1_3">
             <financialtransactionid>3171312</financialtransactionid>
             <status>SUCCESSFUL</status>
-            <providertransactionid>MTL000001</providertransactionid>
+            <providertransactionid>ACME000001</providertransactionid>
             </ns0:gettransactionstatusresponse>
             XML);
 
         $status = $client->getTransactionStatus('000001');
 
         self::assertSame('3171312', $status->financialTransactionId);
-        self::assertSame('MTL000001', $status->providerTransactionId);
+        self::assertSame('ACME000001', $status->providerTransactionId);
         self::assertTrue($status->isSuccessful());
         self::assertTrue($status->status->isSettled());
     }
@@ -105,7 +108,7 @@ final class IntegrationSheetTest extends TestCase
             <?xml version="1.0" encoding="UTF-8"?>
             <ns0:sptransferresponse xmlns:ns0="http://www.ericsson.com/em/emm/serviceprovider/v1_2/backend">
             <transactionid>3282002</transactionid>
-            <providertransactionid>MTL-XXXXXX</providertransactionid>
+            <providertransactionid>ACME-XXXXXX</providertransactionid>
             </ns0:sptransferresponse>
             XML);
 
@@ -116,7 +119,7 @@ final class IntegrationSheetTest extends TestCase
         ));
 
         self::assertSame('3282002', $response->transactionId);
-        self::assertSame('MTL-XXXXXX', $response->providerTransactionId);
+        self::assertSame('ACME-XXXXXX', $response->providerTransactionId);
     }
 
     public function test_parses_the_documented_debit_completed_callback(): void
@@ -127,7 +130,7 @@ final class IntegrationSheetTest extends TestCase
             <?xml version="1.0" encoding="UTF-8"?>
             <ns0:debitcompletedrequest xmlns:ns0="http://www.ericsson.com/em/emm/callback/v1_2">
             <transactionid>3171312</transactionid>
-            <externaltransactionid>MTL000001</externaltransactionid>
+            <externaltransactionid>ACME000001</externaltransactionid>
             <receiverinfo>
                    <fri>FRI:1360073/MM</fri>
                    <msisdn>8230X04XX</msisdn>
@@ -135,13 +138,13 @@ final class IntegrationSheetTest extends TestCase
             </receiverinfo>
             <status>SUCCESSFUL</status>
             <communicationchannel>http-sp</communicationchannel>
-            <referenceid>MTL000001</referenceid>
+            <referenceid>ACME000001</referenceid>
             </ns0:debitcompletedrequest>
             XML);
 
         self::assertSame('3171312', $callback->transactionId);
-        self::assertSame('MTL000001', $callback->externalTransactionId);
-        self::assertSame('MTL000001', $callback->referenceId);
+        self::assertSame('ACME000001', $callback->externalTransactionId);
+        self::assertSame('ACME000001', $callback->referenceId);
         self::assertSame('http-sp', $callback->communicationChannel);
         self::assertSame('FRI:1360073/MM', $callback->receiver->fri);
         self::assertSame('8230X04XX', $callback->receiver->msisdn);
@@ -213,12 +216,12 @@ final class IntegrationSheetTest extends TestCase
     {
         $config = $this->config();
 
-        self::assertSame('MTL000001', $config->newTransactionId('000001'));
+        self::assertSame('ACME000001', $config->newTransactionId('000001'));
         // Already-prefixed ids are left alone (applyPrefix is idempotent).
-        self::assertSame('MTL000001', $config->newTransactionId('MTL000001'));
+        self::assertSame('ACME000001', $config->newTransactionId('ACME000001'));
 
         $generated = $config->newTransactionId();
-        self::assertStringStartsWith('MTL', $generated);
+        self::assertStringStartsWith('ACME', $generated);
         self::assertNotSame($generated, $config->newTransactionId());
     }
 }

@@ -27,7 +27,7 @@ return new class extends Migration {
             $table->string('type', 16)->index();
 
             // Ids we send to the aggregator, already carrying the partner
-            // prefix (e.g. MTL000001).
+            // prefix (e.g. ACME000001).
             $table->string('external_transaction_id')->nullable();   // debit
             $table->string('provider_transaction_id')->nullable();   // transfer
             $table->string('reference_id')->nullable()->index();     // status lookups

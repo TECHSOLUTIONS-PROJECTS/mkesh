@@ -33,8 +33,11 @@ final class MkeshConfig
      * @param Fri|string  $serviceProviderFri The SP wallet FRI credited on a debit, e.g. "FRI:pagamKesh/USER".
      * @param string      $baseUrl            Base aggregator URL, e.g. "https://41.220.193.151".
      * @param string      $defaultCurrency    Currency applied to amounts when not given (e.g. "MZN").
-     * @param string|null $transactionPrefix  Mandatory prefix the aggregator requires on
-     *                                         externaltransactionid / referenceid values (e.g. "MTL").
+     * @param string|null $transactionPrefix  Partner token the aggregator requires at the start of every
+     *                                         externaltransactionid / providertransactionid / referenceid.
+     *                                         Assigned by the provider during onboarding ("ACME" in the docs
+     *                                         is a placeholder). Null/empty means "no prefix": ids pass
+     *                                         through untouched. See {@see applyPrefix()}.
      * @param string|null $callbackUrl         The debitcompleted callback endpoint. Registered with the
      *                                         aggregator out of band — see {@see $sendCallbackUrl}.
      * @param bool        $verifySsl           Whether to verify the TLS certificate.
@@ -134,6 +137,14 @@ final class MkeshConfig
     /**
      * Apply the configured transaction prefix to an id, unless it already
      * carries it. Returns the id unchanged when no prefix is configured.
+     *
+     * Idempotent, so it is safe to call on an id you already stored:
+     *
+     *   applyPrefix('000001')       // "ACME000001"
+     *   applyPrefix('ACME000001')   // "ACME000001" — not doubled
+     *   applyPrefix('ORD-1234')     // "ACMEORD-1234"
+     *
+     * ("ACME" stands in for whatever partner token the provider assigned you.)
      */
     public function applyPrefix(string $id): string
     {
@@ -152,9 +163,14 @@ final class MkeshConfig
      * Generate a fresh, spec-compliant transaction id: the configured prefix
      * followed by a unique, URL-safe suffix.
      *
+     *   newTransactionId()           // "ACME9F2C4A1B77E30D55" — 16 random hex chars
+     *   newTransactionId('ORD-1234') // "ACMEORD-1234" — your own order number
+     *
      * The aggregator rejects a reused id with REFERENCE_ID_ALREADY_IN_USE, so
      * ids must be unique per service provider — persist the value you generate
-     * before sending the request.
+     * before sending the request. If you do hit that error, the original almost
+     * certainly went through: query the status instead of retrying with a new
+     * id.
      */
     public function newTransactionId(?string $suffix = null): string
     {

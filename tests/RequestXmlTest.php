@@ -17,10 +17,10 @@ final class RequestXmlTest extends TestCase
     private function config(): MkeshConfig
     {
         return new MkeshConfig(
-            username: 'MTL',
+            username: 'ACME',
             password: 'secret',
             serviceProviderFri: 'FRI:pagamKesh/USER',
-            transactionPrefix: 'MTL',
+            transactionPrefix: 'ACME',
             callbackUrl: 'https://partner.example/mkesh/callback',
         );
     }
@@ -46,8 +46,8 @@ final class RequestXmlTest extends TestCase
         self::assertStringContainsString('<fromfri>FRI:258823040400/MSISDN</fromfri>', $xml);
         self::assertStringContainsString('<tofri>FRI:pagamKesh/USER</tofri>', $xml);
         self::assertStringContainsString('<amount><amount>25</amount><currency>MZN</currency></amount>', $xml);
-        self::assertStringContainsString('<externaltransactionid>MTL000001</externaltransactionid>', $xml);
-        self::assertStringContainsString('<referenceid>MTL000001</referenceid>', $xml);
+        self::assertStringContainsString('<externaltransactionid>ACME000001</externaltransactionid>', $xml);
+        self::assertStringContainsString('<referenceid>ACME000001</referenceid>', $xml);
 
         self::assertSame(
             ['fromfri', 'tofri', 'amount', 'externaltransactionid', 'referenceid'],
@@ -69,7 +69,7 @@ final class RequestXmlTest extends TestCase
 
         self::assertSame('000001', $request->referenceId());
         self::assertStringContainsString(
-            '<referenceid>MTL000001</referenceid>',
+            '<referenceid>ACME000001</referenceid>',
             $request->toXml($this->config()),
         );
     }
@@ -93,10 +93,10 @@ final class RequestXmlTest extends TestCase
     public function test_debit_request_sends_callback_url_when_opted_in(): void
     {
         $config = new MkeshConfig(
-            username: 'MTL',
+            username: 'ACME',
             password: 'secret',
             serviceProviderFri: 'FRI:pagamKesh/USER',
-            transactionPrefix: 'MTL',
+            transactionPrefix: 'ACME',
             callbackUrl: 'https://partner.example/mkesh/callback',
             sendCallbackUrl: true,
         );
@@ -126,9 +126,9 @@ final class RequestXmlTest extends TestCase
 
         self::assertStringContainsString('<sendingfri>FRI:pagamKesh/USER</sendingfri>', $xml);
         self::assertStringContainsString('<receivingfri>FRI:258823040400/MSISDN</receivingfri>', $xml);
-        self::assertStringContainsString('<providertransactionid>MTLXXXXX</providertransactionid>', $xml);
+        self::assertStringContainsString('<providertransactionid>ACMEXXXXX</providertransactionid>', $xml);
         // referenceid defaults to the provider transaction id.
-        self::assertStringContainsString('<referenceid>MTLXXXXX</referenceid>', $xml);
+        self::assertStringContainsString('<referenceid>ACMEXXXXX</referenceid>', $xml);
         self::assertStringContainsString('serviceprovider/v1_2/backend', $xml);
 
         self::assertSame(
@@ -144,10 +144,10 @@ final class RequestXmlTest extends TestCase
     public function test_sptransfer_uses_the_dedicated_sending_fri_when_configured(): void
     {
         $config = new MkeshConfig(
-            username: 'MTL',
+            username: 'ACME',
             password: 'secret',
             serviceProviderFri: 'FRI:pagamKesh/USER',
-            transactionPrefix: 'MTL',
+            transactionPrefix: 'ACME',
             spTransferSendingFri: 'FRI:47225552/MM',
         );
 
@@ -173,7 +173,7 @@ final class RequestXmlTest extends TestCase
     {
         $xml = (new GetTransactionStatusRequest('000001'))->toXml($this->config());
 
-        self::assertStringContainsString('<referenceid>MTL000001</referenceid>', $xml);
+        self::assertStringContainsString('<referenceid>ACME000001</referenceid>', $xml);
         self::assertStringContainsString('financial/v1_3', $xml);
     }
 

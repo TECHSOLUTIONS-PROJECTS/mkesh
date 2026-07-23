@@ -58,7 +58,7 @@ function buildConfig(): MkeshConfig
 {
     return new MkeshConfig(
         // Credenciais HTTP Basic dadas pelo provedor.
-        username: getenv('MKESH_USERNAME') ?: 'MTL',
+        username: getenv('MKESH_USERNAME') ?: 'ACME',
         password: getenv('MKESH_PASSWORD') ?: 'secret',
 
         // Carteira CREDITADA quando cobramos um cliente (C2B).
@@ -68,7 +68,7 @@ function buildConfig(): MkeshConfig
         defaultCurrency: 'MZN',
 
         // Prefixo OBRIGATORIO. O pacote aplica-o sozinho a todos os ids.
-        transactionPrefix: 'MTL',
+        transactionPrefix: 'ACME',
 
         // O endpoint do callback e registado no lado do provedor. Isto aqui e
         // so referencia — nao vai no payload (ver sendCallbackUrl).
@@ -93,11 +93,11 @@ function buildConfig(): MkeshConfig
 function buildConfigFromArray(): MkeshConfig
 {
     return MkeshConfig::fromArray([
-        'username' => 'MTL',
+        'username' => 'ACME',
         'password' => 'secret',
         'service_provider_fri' => 'FRI:pagamKesh/USER',
         'sp_transfer_sending_fri' => 'FRI:47225552/MM',
-        'transaction_prefix' => 'MTL',
+        'transaction_prefix' => 'ACME',
         'callback_url' => 'https://a-sua-app.example/mkesh/callback',
         'base_url' => 'https://41.220.193.151',
         'default_currency' => 'MZN',
@@ -115,11 +115,11 @@ function buildConfigFromArray(): MkeshConfig
  *   php artisan migrate
  *
  * .env:
- *   MKESH_USERNAME=MTL
+ *   MKESH_USERNAME=ACME
  *   MKESH_PASSWORD=...
  *   MKESH_SP_FRI=FRI:pagamKesh/USER
  *   MKESH_SP_TRANSFER_FRI=FRI:47225552/MM
- *   MKESH_TRANSACTION_PREFIX=MTL
+ *   MKESH_TRANSACTION_PREFIX=ACME
  *   MKESH_CALLBACK_URL=https://a-sua-app.example/mkesh/callback
  *
  * Depois, em qualquer sitio:
@@ -137,24 +137,30 @@ function buildConfigFromArray(): MkeshConfig
  * =============================================================================
  *
  * Regras do agregador:
- *   - todo o id tem de comecar pelo prefixo do parceiro (ex.: MTL);
+ *   - todo o id tem de comecar pelo token de parceiro que o provedor lhe deu
+ *     no onboarding. O 'ACME' usado aqui e so um PLACEHOLDER — o seu valor
+ *     real vem deles e um prefixo errado faz o pedido ser recusado;
  *   - tem de ser unico por service provider — repetir da
- *     REFERENCE_ID_ALREADY_IN_USE;
+ *     REFERENCE_ID_ALREADY_IN_USE. Nesse caso o original quase de certeza
+ *     passou: consulte o estado, NAO gere um id novo;
  *   - GRAVE o id ANTES de enviar o pedido, senao uma falha de rede deixa-o sem
  *     saber que id foi usado.
+ *
+ * Sem prefixo configurado o SDK nao inventa nenhum: os ids passam intactos.
  */
 
 function demonstrarIds(MkeshConfig $config): void
 {
-    // Id novo e unico, ja com prefixo: "MTL9F2C4A1B77E30D55"
+    // Id novo e unico, ja com prefixo: "ACME9F2C4A1B77E30D55"
     echo $config->newTransactionId() . PHP_EOL;
 
-    // Com sufixo proprio (o seu nr. de encomenda, por exemplo): "MTLORD-1234"
+    // Com sufixo proprio (o seu nr. de encomenda, por exemplo): "ACMEORD-1234"
     echo $config->newTransactionId('ORD-1234') . PHP_EOL;
 
     // applyPrefix() e idempotente — chamar duas vezes nao duplica o prefixo.
-    echo $config->applyPrefix('000001') . PHP_EOL;      // MTL000001
-    echo $config->applyPrefix('MTL000001') . PHP_EOL;   // MTL000001
+    echo $config->applyPrefix('000001') . PHP_EOL;       // ACME000001
+    echo $config->applyPrefix('ACME000001') . PHP_EOL;   // ACME000001
+    echo $config->applyPrefix('ORD-1234') . PHP_EOL;     // ACMEORD-1234
 }
 
 /* =============================================================================
@@ -224,7 +230,7 @@ function pagar(MkeshClient $mkesh): void
     $resposta = $mkesh->transfer($pedido);
 
     $resposta->transactionId;            // "3282002"
-    $resposta->providerTransactionId;    // "MTL-XXXXXX"
+    $resposta->providerTransactionId;    // "ACME-XXXXXX"
 }
 
 /* =============================================================================
@@ -245,7 +251,7 @@ function consultarEstado(MkeshClient $mkesh): void
 
     $estado->financialTransactionId;     // "3171312"
     $estado->status;                     // TransactionStatus::SUCCESSFUL
-    $estado->providerTransactionId;      // "MTL000001" (ausente quando FAILED)
+    $estado->providerTransactionId;      // "ACME000001" (ausente quando FAILED)
 
     $estado->isSuccessful();
     $estado->isFailed();

@@ -23,7 +23,7 @@ omissão).
 
 1. [Requisitos](#1-requisitos)
 2. [Instalação](#2-instalação)
-3. [Configuração](#3-configuração)
+3. [Configuração](#3-configuração) — incluindo [o prefixo de transacção](#35-o-prefixo-de-transacção-em-detalhe)
 4. [Como funciona o fluxo C2B](#4-como-funciona-o-fluxo-c2b)
 5. [Guia rápido Laravel](#5-guia-rápido-laravel) — do zero ao primeiro pagamento
 6. [Usar numa classe Laravel](#6-usar-numa-classe-laravel) — controller, service, job, command
@@ -77,7 +77,7 @@ php artisan vendor:publish --tag=mkesh-migrations
 
 ```dotenv
 # Credenciais HTTP Basic (dadas pelo provedor)
-MKESH_USERNAME=MTL
+MKESH_USERNAME=ACME
 MKESH_PASSWORD=
 
 # FRI creditada quando cobra um cliente (C2B)
@@ -87,7 +87,7 @@ MKESH_SP_FRI=FRI:pagamKesh/USER
 MKESH_SP_TRANSFER_FRI=FRI:47225552/MM
 
 # Prefixo obrigatório nos ids. O pacote aplica-o sozinho.
-MKESH_TRANSACTION_PREFIX=MTL
+MKESH_TRANSACTION_PREFIX=ACME
 
 # O seu endpoint de callback — registe este URL junto do provedor
 MKESH_CALLBACK_URL=https://a-sua-app.co.mz/api/mkesh/callback
@@ -110,7 +110,7 @@ Referência completa (ficheiro pronto a copiar em [`.env.example`](.env.example)
 | `MKESH_SP_TRANSFER_FRI` | *(usa `MKESH_SP_FRI`)* | Carteira debitada num pagamento (B2C) |
 | `MKESH_BASE_URL` | `https://41.220.193.151` | Host do agregador |
 | `MKESH_CURRENCY` | `MZN` | Moeda por omissão |
-| `MKESH_TRANSACTION_PREFIX` | — | Prefixo forçado nos ids (ex.: `MTL`) |
+| `MKESH_TRANSACTION_PREFIX` | — | Prefixo forçado nos ids (ex.: `ACME`) |
 | `MKESH_CALLBACK_URL` | — | O seu endpoint de callback |
 | `MKESH_SEND_CALLBACK_URL` | `false` | Emitir `<callbackurl>` dentro do débito |
 | `MKESH_VERIFY_SSL` | `true` | Verificar o certificado TLS |
@@ -123,8 +123,9 @@ Referência completa (ficheiro pronto a copiar em [`.env.example`](.env.example)
 ### 3.2 Três regras rígidas do agregador
 
 - **O prefixo é obrigatório.** Todo o `externaltransactionid` / `referenceid`
-  tem de começar pelo seu token de parceiro (ex.: `MTL`). Defina-o uma vez na
-  configuração e passe ids simples — o pacote prefixa-os, de forma idempotente.
+  tem de começar pelo token de parceiro que o provedor lhe atribuir. Defina-o
+  uma vez na configuração e passe ids simples — o pacote prefixa-os, de forma
+  idempotente. Ver [secção 3.5](#35-o-prefixo-de-transacção-em-detalhe).
 - **Os ids têm de ser únicos por service provider.** Reutilizar um dá
   `REFERENCE_ID_ALREADY_IN_USE`. Use `$config->newTransactionId()` e **grave o
   valor antes** de enviar o pedido.
@@ -139,10 +140,10 @@ use TechSolutions\Mkesh\Config\MkeshConfig;
 use TechSolutions\Mkesh\MkeshClient;
 
 $config = new MkeshConfig(
-    username: 'MTL',
+    username: 'ACME',
     password: 'a-sua-senha',
     serviceProviderFri: 'FRI:pagamKesh/USER',   // creditada no débito (C2B)
-    transactionPrefix: 'MTL',
+    transactionPrefix: 'ACME',
     callbackUrl: 'https://a-sua-app.co.mz/api/mkesh/callback',
     spTransferSendingFri: 'FRI:47225552/MM',    // debitada no pagamento (B2C)
 );
@@ -154,11 +155,11 @@ Ou a partir de um array, com o mesmo formato do `config/mkesh.php`:
 
 ```php
 $config = MkeshConfig::fromArray([
-    'username' => 'MTL',
+    'username' => 'ACME',
     'password' => 'a-sua-senha',
     'service_provider_fri' => 'FRI:pagamKesh/USER',
     'sp_transfer_sending_fri' => 'FRI:47225552/MM',
-    'transaction_prefix' => 'MTL',
+    'transaction_prefix' => 'ACME',
 ]);
 ```
 
@@ -175,6 +176,67 @@ ser acordados com eles **separadamente para teste e produção**:
 | Nr. de conta / MSISDN | provedor → você | `MKESH_SP_FRI` / `MKESH_SP_TRANSFER_FRI` |
 | Prefixo de transacção | provedor → você | `MKESH_TRANSACTION_PREFIX` |
 | URL base | provedor → você | `MKESH_BASE_URL` |
+
+### 3.5 O prefixo de transacção em detalhe
+
+> Nos exemplos deste README o prefixo é `ACME` — é só um **placeholder**. O seu
+> valor real é atribuído pelo provedor no onboarding e costuma ser uma sigla
+> curta da sua empresa. Nunca o invente: um id com prefixo errado é recusado.
+
+O agregador identifica o service provider pelo prefixo dos ids. É por isso que
+todo o `externaltransactionid`, `providertransactionid` e `referenceid` tem de
+começar por ele.
+
+Configure-o **uma vez**:
+
+```dotenv
+MKESH_TRANSACTION_PREFIX=ACME
+```
+
+```php
+$config = new MkeshConfig(
+    // ...
+    transactionPrefix: 'ACME',
+);
+```
+
+E a partir daí passe ids simples. O pacote aplica o prefixo sozinho, em todos os
+pedidos:
+
+```php
+$config->applyPrefix('000001');       // "ACME000001"
+$config->applyPrefix('ACME000001');   // "ACME000001"  — idempotente, não duplica
+$config->applyPrefix('ORD-1234');     // "ACMEORD-1234"
+```
+
+**Gerar um id novo.** `newTransactionId()` devolve o prefixo mais um sufixo
+aleatório de 16 caracteres hexadecimais (8 bytes de `random_bytes`):
+
+```php
+$config->newTransactionId();             // "ACME9F2C4A1B77E30D55"
+$config->newTransactionId('ORD-1234');   // "ACMEORD-1234"  — o seu nr. de encomenda
+$config->newTransactionId('000001');     // "ACME000001"
+```
+
+| Chamada | Resultado | Quando usar |
+|---------|-----------|-------------|
+| `newTransactionId()` | `ACME9F2C4A1B77E30D55` | Caso geral — não há nada seu a que amarrar o id |
+| `newTransactionId('ORD-1234')` | `ACMEORD-1234` | Quer o id rastreável até à encomenda/factura |
+| `applyPrefix($id)` | `ACME<id>` | Já tem um id gravado e só quer garantir o prefixo |
+
+**Três coisas a saber:**
+
+1. **Grave o id antes de enviar o pedido.** O agregador recusa um id repetido
+   com `REFERENCE_ID_ALREADY_IN_USE`, e nesse caso o original quase de certeza
+   passou — a resposta correcta é consultar o estado, não gerar um id novo.
+2. **É idempotente.** Passar um id que já tem o prefixo não o duplica, portanto
+   pode chamar `applyPrefix()` à vontade sem verificar antes.
+3. **Sem prefixo configurado o pacote não inventa nenhum** — `applyPrefix()`
+   devolve o id intacto. Isto é deliberado: se o provedor não lhe exigir prefixo,
+   deixe `MKESH_TRANSACTION_PREFIX` vazio e nada muda.
+
+Se usar prefixos diferentes em teste e em produção (é o habitual), é só a
+variável de ambiente que muda — nenhum código seu é afectado.
 
 ---
 
@@ -547,9 +609,10 @@ $this->app->instance(MkeshClient::class, $mkesh);
 
 ## 7. Operações em detalhe
 
-> Todos os ids mostrados já incluem o prefixo `MTL`, que o pacote aplica
-> automaticamente a `externaltransactionid` / `providertransactionid` /
-> `referenceid`.
+> Todos os ids mostrados já incluem o prefixo — aqui `ACME`, um placeholder; o
+> seu vem do provedor. O pacote aplica-o automaticamente a
+> `externaltransactionid` / `providertransactionid` / `referenceid`. Ver
+> [secção 3.5](#35-o-prefixo-de-transacção-em-detalhe).
 
 ### 7.1 Debit request — C2B (cobrar um cliente)
 
@@ -587,8 +650,8 @@ $pedido = new DebitRequest(
     <amount>25</amount>
     <currency>MZN</currency>
   </amount>
-  <externaltransactionid>MTL000001</externaltransactionid>
-  <referenceid>MTL000001</referenceid>
+  <externaltransactionid>ACME000001</externaltransactionid>
+  <referenceid>ACME000001</referenceid>
 </ns0:debitrequest>
 ```
 
@@ -640,8 +703,8 @@ $resposta = $mkesh->transfer(SpTransferRequest::payout(
     <amount>25</amount>
     <currency>MZN</currency>
   </amount>
-  <providertransactionid>MTLXXXXX</providertransactionid>
-  <referenceid>MTLXXXXX</referenceid>
+  <providertransactionid>ACMEXXXXX</providertransactionid>
+  <referenceid>ACMEXXXXX</referenceid>
 </ns2:sptransferrequest>
 ```
 
@@ -651,13 +714,13 @@ $resposta = $mkesh->transfer(SpTransferRequest::payout(
 <?xml version="1.0" encoding="UTF-8"?>
 <ns0:sptransferresponse xmlns:ns0="http://www.ericsson.com/em/emm/serviceprovider/v1_2/backend">
   <transactionid>3282002</transactionid>
-  <providertransactionid>MTL-XXXXXX</providertransactionid>
+  <providertransactionid>ACME-XXXXXX</providertransactionid>
 </ns0:sptransferresponse>
 ```
 
 ```php
 $resposta->transactionId;            // "3282002"
-$resposta->providerTransactionId;    // "MTL-XXXXXX"
+$resposta->providerTransactionId;    // "ACME-XXXXXX"
 ```
 
 ### 7.3 Get transaction status (recuperar um resultado)
@@ -674,7 +737,7 @@ $estado = $mkesh->getTransactionStatus('000001');   // prefixo aplicado
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <ns0:gettransactionstatusrequest xmlns:ns0="http://www.ericsson.com/em/emm/financial/v1_3">
-  <referenceid>MTL000001</referenceid>
+  <referenceid>ACME000001</referenceid>
 </ns0:gettransactionstatusrequest>
 ```
 
@@ -685,7 +748,7 @@ $estado = $mkesh->getTransactionStatus('000001');   // prefixo aplicado
 <ns0:gettransactionstatusresponse xmlns:ns0="http://www.ericsson.com/em/emm/financial/v1_3">
   <financialtransactionid>3171312</financialtransactionid>
   <status>SUCCESSFUL</status>
-  <providertransactionid>MTL000001</providertransactionid>
+  <providertransactionid>ACME000001</providertransactionid>
 </ns0:gettransactionstatusresponse>
 ```
 
@@ -716,7 +779,7 @@ O agregador faz POST disto para o endpoint que registou junto do provedor.
 <?xml version="1.0" encoding="UTF-8"?>
 <ns0:debitcompletedrequest xmlns:ns0="http://www.ericsson.com/em/emm/callback/v1_2">
   <transactionid>3171312</transactionid>
-  <externaltransactionid>MTL000001</externaltransactionid>
+  <externaltransactionid>ACME000001</externaltransactionid>
   <receiverinfo>
     <fri>FRI:1360073/MM</fri>
     <msisdn>8230X04XX</msisdn>
@@ -724,7 +787,7 @@ O agregador faz POST disto para o endpoint que registou junto do provedor.
   </receiverinfo>
   <status>SUCCESSFUL</status>
   <communicationchannel>http-sp</communicationchannel>
-  <referenceid>MTL000001</referenceid>
+  <referenceid>ACME000001</referenceid>
 </ns0:debitcompletedrequest>
 ```
 
@@ -732,7 +795,7 @@ O agregador faz POST disto para o endpoint que registou junto do provedor.
 $callback = $mkesh->parseDebitCompleted($corpoDoPedido);
 
 $callback->transactionId;            // "3171312"
-$callback->externalTransactionId;    // "MTL000001" — o NOSSO id
+$callback->externalTransactionId;    // "ACME000001" — o NOSSO id
 $callback->referenceId;
 $callback->status;                   // TransactionStatus::SUCCESSFUL
 $callback->communicationChannel;     // "http-sp"

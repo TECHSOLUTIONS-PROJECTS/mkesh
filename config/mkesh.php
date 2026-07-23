@@ -42,9 +42,21 @@ return [
     |--------------------------------------------------------------------------
     | Transaction id prefix
     |--------------------------------------------------------------------------
-    | The aggregator requires every externaltransactionid / referenceid to be
-    | prefixed with a partner-specific token (e.g. "MTL"). The SDK prepends it
-    | automatically, so you pass bare ids to DebitRequest / SpTransferRequest.
+    | The aggregator identifies the service provider by the prefix on the ids,
+    | so every externaltransactionid / providertransactionid / referenceid must
+    | start with the partner token the provider assigns you during onboarding.
+    | "ACME" below is only a placeholder — never invent your own value.
+    |
+    | Set it once here and pass bare ids everywhere else; the SDK prepends it,
+    | idempotently:
+    |
+    |   $config->applyPrefix('000001')       // "ACME000001"
+    |   $config->applyPrefix('ACME000001')   // "ACME000001" — not doubled
+    |   $config->newTransactionId()          // "ACME9F2C4A1B77E30D55"
+    |   $config->newTransactionId('ORD-1234')// "ACMEORD-1234"
+    |
+    | Leave it empty if your aggregator instance does not require a prefix: the
+    | SDK then passes ids through untouched rather than inventing one.
     */
     'transaction_prefix' => env('MKESH_TRANSACTION_PREFIX'),
 
