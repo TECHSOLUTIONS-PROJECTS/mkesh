@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Exception;
+namespace TechSolutions\Mkesh\Exception;
 
 /**
  * Thrown when the SDK is configured with missing or invalid settings.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\ValueObject;
+namespace TechSolutions\Mkesh\ValueObject;
 
 /**
  * receiverinfo v1.0 — information about the receiving party, as carried in the

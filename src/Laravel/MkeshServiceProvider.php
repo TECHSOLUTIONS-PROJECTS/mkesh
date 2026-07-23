@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Laravel;
+namespace TechSolutions\Mkesh\Laravel;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
-use BrilliantMind\Mkesh\Config\MkeshConfig;
-use BrilliantMind\Mkesh\MkeshClient;
+use TechSolutions\Mkesh\Config\MkeshConfig;
+use TechSolutions\Mkesh\MkeshClient;
 
 /**
  * Registers the MKESH client into the Laravel container and publishes config.

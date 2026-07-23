@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Callback;
+namespace TechSolutions\Mkesh\Callback;
 
-use BrilliantMind\Mkesh\Enum\CallbackResponseCode;
+use TechSolutions\Mkesh\Enum\CallbackResponseCode;
 use Stringable;
 
 /**

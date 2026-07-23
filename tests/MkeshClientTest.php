@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Tests;
+namespace TechSolutions\Mkesh\Tests;
 
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
-use BrilliantMind\Mkesh\Config\MkeshConfig;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
-use BrilliantMind\Mkesh\MkeshClient;
-use BrilliantMind\Mkesh\Request\DebitRequest;
-use BrilliantMind\Mkesh\Tests\Support\FakeHttpClient;
-use BrilliantMind\Mkesh\ValueObject\Fri;
-use BrilliantMind\Mkesh\ValueObject\Money;
+use TechSolutions\Mkesh\Config\MkeshConfig;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\MkeshClient;
+use TechSolutions\Mkesh\Request\DebitRequest;
+use TechSolutions\Mkesh\Tests\Support\FakeHttpClient;
+use TechSolutions\Mkesh\ValueObject\Fri;
+use TechSolutions\Mkesh\ValueObject\Money;
 
 final class MkeshClientTest extends TestCase
 {

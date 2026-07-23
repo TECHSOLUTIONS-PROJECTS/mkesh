@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Callback;
+namespace TechSolutions\Mkesh\Callback;
 
 use DOMElement;
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
-use BrilliantMind\Mkesh\ValueObject\ReceiverInfo;
-use BrilliantMind\Mkesh\Xml\XmlReader;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\ValueObject\ReceiverInfo;
+use TechSolutions\Mkesh\Xml\XmlReader;
 
 /**
  * initiatetransfercompletedrequest v1.0 — the asynchronous callback the

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;

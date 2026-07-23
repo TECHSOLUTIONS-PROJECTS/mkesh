@@ -6,10 +6,10 @@ namespace App\Jobs;
 
 use App\Models\MkeshResponse;
 use App\Models\MkeshTransaction;
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
-use BrilliantMind\Mkesh\Exception\TransportException;
-use BrilliantMind\Mkesh\MkeshClient;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\Exception\TransportException;
+use TechSolutions\Mkesh\MkeshClient;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

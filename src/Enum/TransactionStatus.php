@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Enum;
+namespace TechSolutions\Mkesh\Enum;
 
 /**
  * Financial transaction status as reported by the EWP platform.

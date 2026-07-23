@@ -18,4 +18,4 @@
 
 # examples/ e .env.example ficam DE PROPÓSITO no dist: o README manda copiar
 # esses ficheiros para a aplicação, e eles têm de existir em
-# vendor/brilliantmind/mkesh/ para isso ser possível.
+# vendor/techsolutions/mkesh/ para isso ser possível.

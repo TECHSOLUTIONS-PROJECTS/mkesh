@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Xml;
+namespace TechSolutions\Mkesh\Xml;
 
 use DOMDocument;
 use DOMElement;

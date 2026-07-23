@@ -1,4 +1,8 @@
-# brilliantmind/mkesh
+# techsolutions/mkesh
+
+> Um projecto da **[TechSolutions](https://github.com/TECHSOLUTIONS-PROJECTS)**,
+> desenvolvido por **[Osvaldo Geraldo Manjate](https://github.com/osvaldogeraldo)**
+> enquanto colaborador da TechSolutions.
 
 Pacote PHP para a integração **MKESH / PagamKesh** através do **Agregador
 Ericsson EWP** (API "XML over HTTP"), com suporte nativo para Laravel.
@@ -47,7 +51,7 @@ omissão).
 ## 2. Instalação
 
 ```bash
-composer require brilliantmind/mkesh
+composer require techsolutions/mkesh
 ```
 
 Em Laravel o `MkeshServiceProvider` e a facade `Mkesh` são registados
@@ -131,8 +135,8 @@ Referência completa (ficheiro pronto a copiar em [`.env.example`](.env.example)
 ### 3.3 PHP puro (sem Laravel)
 
 ```php
-use BrilliantMind\Mkesh\Config\MkeshConfig;
-use BrilliantMind\Mkesh\MkeshClient;
+use TechSolutions\Mkesh\Config\MkeshConfig;
+use TechSolutions\Mkesh\MkeshClient;
 
 $config = new MkeshConfig(
     username: 'MTL',
@@ -223,7 +227,7 @@ Do zero ao primeiro pagamento em cinco passos.
 **Passo 1 — instalar e configurar**
 
 ```bash
-composer require brilliantmind/mkesh
+composer require techsolutions/mkesh
 php artisan vendor:publish --tag=mkesh-config
 php artisan migrate
 ```
@@ -284,9 +288,9 @@ callback, ou o job apanha o resultado por polling.
 ```php
 namespace App\Services;
 
-use BrilliantMind\Mkesh\MkeshClient;
-use BrilliantMind\Mkesh\Request\DebitRequest;
-use BrilliantMind\Mkesh\ValueObject\Money;
+use TechSolutions\Mkesh\MkeshClient;
+use TechSolutions\Mkesh\Request\DebitRequest;
+use TechSolutions\Mkesh\ValueObject\Money;
 
 final class CheckoutService
 {
@@ -311,7 +315,7 @@ final class CheckoutService
 ### 6.2 Facade
 
 ```php
-use BrilliantMind\Mkesh\Laravel\Facades\Mkesh;
+use TechSolutions\Mkesh\Laravel\Facades\Mkesh;
 
 $id       = Mkesh::config()->newTransactionId();
 $debito   = Mkesh::debit(DebitRequest::charge('258823040400', Money::of(25), $id));
@@ -337,9 +341,9 @@ Métodos disponíveis na facade:
 namespace App\Http\Controllers;
 
 use App\Services\MkeshPaymentService;
-use BrilliantMind\Mkesh\Enum\ErrorCode;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
-use BrilliantMind\Mkesh\Exception\TransportException;
+use TechSolutions\Mkesh\Enum\ErrorCode;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\Exception\TransportException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -404,9 +408,9 @@ O ponto crítico: **o corpo da resposta tem de ser o documento `ResponseCode`.**
 namespace App\Http\Controllers;
 
 use App\Models\MkeshTransaction;
-use BrilliantMind\Mkesh\Callback\CallbackResponse;
-use BrilliantMind\Mkesh\Exception\MkeshException;
-use BrilliantMind\Mkesh\Laravel\Facades\Mkesh;
+use TechSolutions\Mkesh\Callback\CallbackResponse;
+use TechSolutions\Mkesh\Exception\MkeshException;
+use TechSolutions\Mkesh\Laravel\Facades\Mkesh;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -481,7 +485,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\ReconcileMkeshTransaction;
 use App\Models\MkeshTransaction;
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
 use Illuminate\Console\Command;
 
 final class ReconciliarMkesh extends Command
@@ -519,8 +523,8 @@ Schedule::command('mkesh:reconciliar')->everyFifteenMinutes();
 Injecte um cliente PSR-18 falso — não é preciso mais nada:
 
 ```php
-use BrilliantMind\Mkesh\Config\MkeshConfig;
-use BrilliantMind\Mkesh\MkeshClient;
+use TechSolutions\Mkesh\Config\MkeshConfig;
+use TechSolutions\Mkesh\MkeshClient;
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Response;
 
@@ -550,9 +554,9 @@ $this->app->instance(MkeshClient::class, $mkesh);
 ### 7.1 Debit request — C2B (cobrar um cliente)
 
 ```php
-use BrilliantMind\Mkesh\Request\DebitRequest;
-use BrilliantMind\Mkesh\ValueObject\Fri;
-use BrilliantMind\Mkesh\ValueObject\Money;
+use TechSolutions\Mkesh\Request\DebitRequest;
+use TechSolutions\Mkesh\ValueObject\Fri;
+use TechSolutions\Mkesh\ValueObject\Money;
 
 $resposta = $mkesh->debit(DebitRequest::charge(
     customerMsisdn: '258823040400',
@@ -616,7 +620,7 @@ diferente da creditada num débito (`FRI:47225552/MM` vs `FRI:pagamKesh/USER`);
 se não estiver definida, usa a `serviceProviderFri`.
 
 ```php
-use BrilliantMind\Mkesh\Request\SpTransferRequest;
+use TechSolutions\Mkesh\Request\SpTransferRequest;
 
 $resposta = $mkesh->transfer(SpTransferRequest::payout(
     customerMsisdn: '258823040400',
@@ -746,7 +750,7 @@ reenviado:
 ```
 
 ```php
-use BrilliantMind\Mkesh\Callback\CallbackResponse;
+use TechSolutions\Mkesh\Callback\CallbackResponse;
 
 $ack = CallbackResponse::success();
 $ack->toXml();                   // o corpo a devolver
@@ -784,7 +788,7 @@ lançar excepção, para que um valor novo da plataforma nunca parta o parsing.
 ### 8.1 TransactionStatus
 
 ```php
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
 
 TransactionStatus::PENDING;      // à espera da aprovação do cliente
 TransactionStatus::SUCCESSFUL;   // dinheiro movido
@@ -815,7 +819,7 @@ Cobre os códigos que mudam o que a aplicação *faz*, com a decisão já embuti
 em vez de ficar à mercê de comparações de strings:
 
 ```php
-use BrilliantMind\Mkesh\Enum\ErrorCode;
+use TechSolutions\Mkesh\Enum\ErrorCode;
 
 $codigo = $e->code();        // ErrorCode; $e->getErrorCode() dá a string crua
 
@@ -845,7 +849,7 @@ sobre a string crua.
 ### 8.3 CallbackResponseCode
 
 ```php
-use BrilliantMind\Mkesh\Enum\CallbackResponseCode;
+use TechSolutions\Mkesh\Enum\CallbackResponseCode;
 
 CallbackResponseCode::SUCCESS;   // o único documentado pelo provedor
 CallbackResponseCode::FAILURE;
@@ -860,9 +864,9 @@ está especificado.
 ### 8.4 FriType e os value objects
 
 ```php
-use BrilliantMind\Mkesh\Enum\FriType;
-use BrilliantMind\Mkesh\ValueObject\Fri;
-use BrilliantMind\Mkesh\ValueObject\Money;
+use TechSolutions\Mkesh\Enum\FriType;
+use TechSolutions\Mkesh\ValueObject\Fri;
+use TechSolutions\Mkesh\ValueObject\Money;
 
 FriType::MSISDN;         // FRI:258823040400/MSISDN — número de telemóvel
 FriType::USER;           // FRI:pagamKesh/USER      — conta de service provider
@@ -896,9 +900,9 @@ Erros de negócio chegam como um envelope `errorResponse` e são lançados como
 ```
 
 ```php
-use BrilliantMind\Mkesh\Enum\ErrorCode;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
-use BrilliantMind\Mkesh\Exception\MkeshException;
+use TechSolutions\Mkesh\Enum\ErrorCode;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\Exception\MkeshException;
 
 try {
     $mkesh->debit($pedido);
@@ -931,11 +935,11 @@ Hierarquia — todas implementam a interface marcadora `MkeshException`:
 ### Catálogo completo de códigos
 
 Os **670 códigos** da referência da plataforma estão em
-`BrilliantMind\Mkesh\Error\ErrorCodes`, e a descrição é acrescentada
+`TechSolutions\Mkesh\Error\ErrorCodes`, e a descrição é acrescentada
 automaticamente à mensagem da excepção:
 
 ```php
-use BrilliantMind\Mkesh\Error\ErrorCodes;
+use TechSolutions\Mkesh\Error\ErrorCodes;
 
 ErrorCodes::description('TRANSACTION_NOT_FOUND');
 ErrorCodes::has('REFERENCE_ID_ALREADY_IN_USE');
@@ -1056,10 +1060,19 @@ resolver um desacordo com o provedor.
 
 ---
 
+## Créditos
+
+Este pacote é um projecto da **[TechSolutions](https://github.com/TECHSOLUTIONS-PROJECTS)**.
+
+Desenvolvido por **[Osvaldo Geraldo Manjate](https://github.com/osvaldogeraldo)**,
+enquanto colaborador da TechSolutions.
+
+---
+
 ## Licença
 
-MIT — © 2026 BrilliantMind. Ver [LICENSE](LICENSE).
+MIT — © 2026 TechSolutions. Ver [LICENSE](LICENSE).
 
-Suporte: **it@brilliantmind.co.mz**
-#   m k e s h  
- 
+- Repositório: <https://github.com/TECHSOLUTIONS-PROJECTS/mkesh>
+- Geral: **info@techsolutions.co.mz**
+- Suporte técnico: **it@techsolutions.co.mz**

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Enum;
+namespace TechSolutions\Mkesh\Enum;
 
-use BrilliantMind\Mkesh\Error\ErrorCodes;
+use TechSolutions\Mkesh\Error\ErrorCodes;
 
 /**
  * The platform error codes an integration actually branches on.

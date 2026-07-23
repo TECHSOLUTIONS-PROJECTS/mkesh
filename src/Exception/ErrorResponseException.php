@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Exception;
+namespace TechSolutions\Mkesh\Exception;
 
-use BrilliantMind\Mkesh\Enum\ErrorCode;
-use BrilliantMind\Mkesh\Error\ErrorCodes;
+use TechSolutions\Mkesh\Enum\ErrorCode;
+use TechSolutions\Mkesh\Error\ErrorCodes;
 
 /**
  * Thrown when the aggregator returns an EWP errorResponse envelope, e.g.

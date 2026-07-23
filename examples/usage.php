@@ -2,7 +2,7 @@
 
 /**
  * =============================================================================
- *  brilliantmind/mkesh — GUIA DE UTILIZACAO
+ *  techsolutions/mkesh — GUIA DE UTILIZACAO
  * =============================================================================
  *
  * Ficheiro de referencia: mostra TODAS as operacoes, de ponta a ponta, tanto em
@@ -30,23 +30,23 @@
 
 declare(strict_types=1);
 
-use BrilliantMind\Mkesh\Callback\CallbackResponse;
-use BrilliantMind\Mkesh\Config\MkeshConfig;
-use BrilliantMind\Mkesh\Enum\CallbackResponseCode;
-use BrilliantMind\Mkesh\Enum\ErrorCode;
-use BrilliantMind\Mkesh\Enum\FriType;
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
-use BrilliantMind\Mkesh\Error\ErrorCodes;
-use BrilliantMind\Mkesh\Exception\ConfigurationException;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
-use BrilliantMind\Mkesh\Exception\MkeshException;
-use BrilliantMind\Mkesh\Exception\TransportException;
-use BrilliantMind\Mkesh\MkeshClient;
-use BrilliantMind\Mkesh\Request\DebitRequest;
-use BrilliantMind\Mkesh\Request\GetTransactionStatusRequest;
-use BrilliantMind\Mkesh\Request\SpTransferRequest;
-use BrilliantMind\Mkesh\ValueObject\Fri;
-use BrilliantMind\Mkesh\ValueObject\Money;
+use TechSolutions\Mkesh\Callback\CallbackResponse;
+use TechSolutions\Mkesh\Config\MkeshConfig;
+use TechSolutions\Mkesh\Enum\CallbackResponseCode;
+use TechSolutions\Mkesh\Enum\ErrorCode;
+use TechSolutions\Mkesh\Enum\FriType;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Error\ErrorCodes;
+use TechSolutions\Mkesh\Exception\ConfigurationException;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\Exception\MkeshException;
+use TechSolutions\Mkesh\Exception\TransportException;
+use TechSolutions\Mkesh\MkeshClient;
+use TechSolutions\Mkesh\Request\DebitRequest;
+use TechSolutions\Mkesh\Request\GetTransactionStatusRequest;
+use TechSolutions\Mkesh\Request\SpTransferRequest;
+use TechSolutions\Mkesh\ValueObject\Fri;
+use TechSolutions\Mkesh\ValueObject\Money;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -124,7 +124,7 @@ function buildConfigFromArray(): MkeshConfig
  *
  * Depois, em qualquer sitio:
  *
- *   use BrilliantMind\Mkesh\Laravel\Facades\Mkesh;
+ *   use TechSolutions\Mkesh\Laravel\Facades\Mkesh;
  *   $resposta = Mkesh::debit($pedido);
  *
  * Ou injecte no construtor (resolvido automaticamente pelo container):

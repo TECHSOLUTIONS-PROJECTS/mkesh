@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Tests;
+namespace TechSolutions\Mkesh\Tests;
 
 use PHPUnit\Framework\TestCase;
-use BrilliantMind\Mkesh\Config\MkeshConfig;
-use BrilliantMind\Mkesh\Request\DebitRequest;
-use BrilliantMind\Mkesh\Request\GetTransactionStatusRequest;
-use BrilliantMind\Mkesh\Request\SpTransferRequest;
-use BrilliantMind\Mkesh\ValueObject\Fri;
-use BrilliantMind\Mkesh\ValueObject\Money;
+use TechSolutions\Mkesh\Config\MkeshConfig;
+use TechSolutions\Mkesh\Request\DebitRequest;
+use TechSolutions\Mkesh\Request\GetTransactionStatusRequest;
+use TechSolutions\Mkesh\Request\SpTransferRequest;
+use TechSolutions\Mkesh\ValueObject\Fri;
+use TechSolutions\Mkesh\ValueObject\Money;
 
 final class RequestXmlTest extends TestCase
 {

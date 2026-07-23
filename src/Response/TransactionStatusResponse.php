@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Response;
+namespace TechSolutions\Mkesh\Response;
 
 use DOMElement;
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
-use BrilliantMind\Mkesh\Xml\XmlReader;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Xml\XmlReader;
 
 /**
  * gettransactionstatusresponse v1.3 — the recovered status of an operation.

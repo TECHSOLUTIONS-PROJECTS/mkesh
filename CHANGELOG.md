@@ -51,5 +51,5 @@ Primeira versão pública, alinhada com a folha de integração
   (`sp_transfer_sending_fri`), por ser diferente da conta creditada num débito.
 - A ordem dos elementos XML segue exactamente a dos payloads documentados.
 
-[Não lançado]: https://github.com/brilliantmind/mkesh/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/brilliantmind/mkesh/releases/tag/v1.0.0
+[Não lançado]: https://github.com/TECHSOLUTIONS-PROJECTS/mkesh/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/TECHSOLUTIONS-PROJECTS/mkesh/releases/tag/v1.0.0

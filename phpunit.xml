@@ -7,7 +7,7 @@
          failOnWarning="true"
          failOnRisky="true">
     <testsuites>
-        <testsuite name="brilliantmind/mkesh">
+        <testsuite name="techsolutions/mkesh">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

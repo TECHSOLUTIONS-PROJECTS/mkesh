@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Config;
+namespace TechSolutions\Mkesh\Config;
 
-use BrilliantMind\Mkesh\Exception\ConfigurationException;
-use BrilliantMind\Mkesh\ValueObject\Fri;
+use TechSolutions\Mkesh\Exception\ConfigurationException;
+use TechSolutions\Mkesh\ValueObject\Fri;
 
 /**
  * Immutable configuration for the MKESH / EWP aggregator connection.

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Tests;
+namespace TechSolutions\Mkesh\Tests;
 
 use PHPUnit\Framework\TestCase;
-use BrilliantMind\Mkesh\Exception\InvalidArgumentException;
-use BrilliantMind\Mkesh\ValueObject\Fri;
-use BrilliantMind\Mkesh\ValueObject\Money;
+use TechSolutions\Mkesh\Exception\InvalidArgumentException;
+use TechSolutions\Mkesh\ValueObject\Fri;
+use TechSolutions\Mkesh\ValueObject\Money;
 
 final class ValueObjectTest extends TestCase
 {

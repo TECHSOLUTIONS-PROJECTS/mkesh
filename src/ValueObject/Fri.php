@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\ValueObject;
+namespace TechSolutions\Mkesh\ValueObject;
 
 use Stringable;
-use BrilliantMind\Mkesh\Enum\FriType;
-use BrilliantMind\Mkesh\Exception\InvalidArgumentException;
+use TechSolutions\Mkesh\Enum\FriType;
+use TechSolutions\Mkesh\Exception\InvalidArgumentException;
 
 /**
  * A Financial Resource Identifier, rendered on the wire as "FRI:<value>/<TYPE>".

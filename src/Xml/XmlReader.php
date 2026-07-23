@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Xml;
+namespace TechSolutions\Mkesh\Xml;
 
 use DOMDocument;
 use DOMElement;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
-use BrilliantMind\Mkesh\Exception\TransportException;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\Exception\TransportException;
 
 /**
  * Parses response XML coming back from the aggregator and surfaces EWP

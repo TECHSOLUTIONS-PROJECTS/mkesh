@@ -6,9 +6,9 @@ namespace App\Http\Controllers;
 
 use App\Models\MkeshResponse;
 use App\Models\MkeshTransaction;
-use BrilliantMind\Mkesh\Callback\CallbackResponse;
-use BrilliantMind\Mkesh\Exception\MkeshException;
-use BrilliantMind\Mkesh\Laravel\Facades\Mkesh;
+use TechSolutions\Mkesh\Callback\CallbackResponse;
+use TechSolutions\Mkesh\Exception\MkeshException;
+use TechSolutions\Mkesh\Laravel\Facades\Mkesh;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;

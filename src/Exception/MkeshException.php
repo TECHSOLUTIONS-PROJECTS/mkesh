@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Exception;
+namespace TechSolutions\Mkesh\Exception;
 
 use Throwable;
 

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Tests;
+namespace TechSolutions\Mkesh\Tests;
 
 use PHPUnit\Framework\TestCase;
-use BrilliantMind\Mkesh\Callback\CallbackResponse;
-use BrilliantMind\Mkesh\Config\MkeshConfig;
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
-use BrilliantMind\Mkesh\MkeshClient;
-use BrilliantMind\Mkesh\Request\DebitRequest;
-use BrilliantMind\Mkesh\Tests\Support\FakeHttpClient;
-use BrilliantMind\Mkesh\ValueObject\Fri;
-use BrilliantMind\Mkesh\ValueObject\Money;
+use TechSolutions\Mkesh\Callback\CallbackResponse;
+use TechSolutions\Mkesh\Config\MkeshConfig;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\MkeshClient;
+use TechSolutions\Mkesh\Request\DebitRequest;
+use TechSolutions\Mkesh\Tests\Support\FakeHttpClient;
+use TechSolutions\Mkesh\ValueObject\Fri;
+use TechSolutions\Mkesh\ValueObject\Money;
 
 /**
  * Parses the verbatim payloads from the provider's "Integration MTL_EWP
@@ -109,7 +109,7 @@ final class IntegrationSheetTest extends TestCase
             </ns0:sptransferresponse>
             XML);
 
-        $response = $client->transfer(\BrilliantMind\Mkesh\Request\SpTransferRequest::payout(
+        $response = $client->transfer(\TechSolutions\Mkesh\Request\SpTransferRequest::payout(
             customerMsisdn: '258823040400',
             amount: Money::of(25),
             providerTransactionId: 'XXXXXX',

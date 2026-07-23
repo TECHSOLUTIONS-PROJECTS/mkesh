@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Error;
+namespace TechSolutions\Mkesh\Error;
 
 /**
  * Catalogue of Mobile Money Manager (EWP) error codes and their descriptions,
  * generated from the platform "XML over HTTP - Error Codes" reference.
  *
  * Use {@see description()} to map an error code returned in an
- * {@see \BrilliantMind\Mkesh\Exception\ErrorResponseException} to a human-readable
+ * {@see \TechSolutions\Mkesh\Exception\ErrorResponseException} to a human-readable
  * message. Unknown codes return null.
  *
  * @internal The list is reference data, not an exhaustive contract — new

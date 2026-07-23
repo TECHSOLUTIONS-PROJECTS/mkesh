@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Request;
+namespace TechSolutions\Mkesh\Request;
 
-use BrilliantMind\Mkesh\Config\MkeshConfig;
-use BrilliantMind\Mkesh\Exception\InvalidArgumentException;
-use BrilliantMind\Mkesh\Xml\Namespaces;
-use BrilliantMind\Mkesh\Xml\XmlWriter;
+use TechSolutions\Mkesh\Config\MkeshConfig;
+use TechSolutions\Mkesh\Exception\InvalidArgumentException;
+use TechSolutions\Mkesh\Xml\Namespaces;
+use TechSolutions\Mkesh\Xml\XmlWriter;
 
 /**
  * gettransactionstatusrequest v1.3 — used to recover the outcome of an earlier

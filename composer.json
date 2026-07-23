@@ -1,21 +1,28 @@
 {
-    "name": "brilliantmind/mkesh",
+    "name": "techsolutions/mkesh",
     "description": "PHP package for the MKESH (PagamKesh) mobile money integration over the Ericsson EWP Aggregator (XML over HTTP), with first-class Laravel support.",
     "keywords": ["mkesh", "pagamkesh", "mobile-money", "ericsson", "ewp", "mozambique", "payments", "laravel"],
     "type": "library",
     "license": "MIT",
+    "homepage": "https://github.com/TECHSOLUTIONS-PROJECTS/mkesh",
     "authors": [
         {
-            "name": "BrilliantMind",
-            "email": "it@brilliantmind.co.mz"
+            "name": "TechSolutions",
+            "email": "info@techsolutions.co.mz",
+            "homepage": "https://github.com/TECHSOLUTIONS-PROJECTS",
+            "role": "Owner"
         },
         {
-            "name": "Osvaldo Geraldo",
-            "email": "osvaldogeraldo34@gmail.com"
+            "name": "Osvaldo Geraldo Manjate",
+            "email": "osvaldogeraldo34@gmail.com",
+            "homepage": "https://github.com/osvaldogeraldo",
+            "role": "Developer @ TechSolutions"
         }
     ],
     "support": {
-        "email": "it@brilliantmind.co.mz"
+        "email": "it@techsolutions.co.mz",
+        "issues": "https://github.com/TECHSOLUTIONS-PROJECTS/mkesh/issues",
+        "source": "https://github.com/TECHSOLUTIONS-PROJECTS/mkesh"
     },
     "require": {
         "php": "^8.1",
@@ -35,12 +42,12 @@
     },
     "autoload": {
         "psr-4": {
-            "BrilliantMind\\Mkesh\\": "src/"
+            "TechSolutions\\Mkesh\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "BrilliantMind\\Mkesh\\Tests\\": "tests/"
+            "TechSolutions\\Mkesh\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -49,10 +56,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "BrilliantMind\\Mkesh\\Laravel\\MkeshServiceProvider"
+                "TechSolutions\\Mkesh\\Laravel\\MkeshServiceProvider"
             ],
             "aliases": {
-                "Mkesh": "BrilliantMind\\Mkesh\\Laravel\\Facades\\Mkesh"
+                "Mkesh": "TechSolutions\\Mkesh\\Laravel\\Facades\\Mkesh"
             }
         }
     },

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Enum;
+namespace TechSolutions\Mkesh\Enum;
 
 /**
  * Known FRI (Financial Resource Identifier) account types used by EWP.
  *
- * Stored as plain strings on {@see \BrilliantMind\Mkesh\ValueObject\Fri} so that
+ * Stored as plain strings on {@see \TechSolutions\Mkesh\ValueObject\Fri} so that
  * unusual types still round-trip; these constants cover the common cases.
  */
 final class FriType

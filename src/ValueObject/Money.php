@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\ValueObject;
+namespace TechSolutions\Mkesh\ValueObject;
 
 use Stringable;
-use BrilliantMind\Mkesh\Exception\InvalidArgumentException;
+use TechSolutions\Mkesh\Exception\InvalidArgumentException;
 
 /**
  * A monetary amount with an ISO currency code.

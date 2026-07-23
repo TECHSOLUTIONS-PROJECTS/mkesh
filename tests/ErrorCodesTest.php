@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Tests;
+namespace TechSolutions\Mkesh\Tests;
 
 use PHPUnit\Framework\TestCase;
-use BrilliantMind\Mkesh\Error\ErrorCodes;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\Error\ErrorCodes;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
 
 final class ErrorCodesTest extends TestCase
 {

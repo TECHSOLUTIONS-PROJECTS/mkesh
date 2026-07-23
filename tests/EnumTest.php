@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Tests;
+namespace TechSolutions\Mkesh\Tests;
 
-use BrilliantMind\Mkesh\Callback\CallbackResponse;
-use BrilliantMind\Mkesh\Enum\CallbackResponseCode;
-use BrilliantMind\Mkesh\Enum\ErrorCode;
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
-use BrilliantMind\Mkesh\Error\ErrorCodes;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\Callback\CallbackResponse;
+use TechSolutions\Mkesh\Enum\CallbackResponseCode;
+use TechSolutions\Mkesh\Enum\ErrorCode;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Error\ErrorCodes;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
 use PHPUnit\Framework\TestCase;
 
 final class EnumTest extends TestCase

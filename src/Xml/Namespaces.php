@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Xml;
+namespace TechSolutions\Mkesh\Xml;
 
 /**
  * XML namespaces used across the EWP "XML over HTTP" operations.

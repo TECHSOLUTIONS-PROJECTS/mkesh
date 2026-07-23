@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Tests;
+namespace TechSolutions\Mkesh\Tests;
 
 use PHPUnit\Framework\TestCase;
-use BrilliantMind\Mkesh\Callback\DebitCompletedNotification;
-use BrilliantMind\Mkesh\Callback\InitiateTransferCompletedNotification;
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
-use BrilliantMind\Mkesh\Exception\TransportException;
-use BrilliantMind\Mkesh\Response\DebitResponse;
-use BrilliantMind\Mkesh\Response\SpTransferResponse;
-use BrilliantMind\Mkesh\Response\TransactionStatusResponse;
+use TechSolutions\Mkesh\Callback\DebitCompletedNotification;
+use TechSolutions\Mkesh\Callback\InitiateTransferCompletedNotification;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\Exception\TransportException;
+use TechSolutions\Mkesh\Response\DebitResponse;
+use TechSolutions\Mkesh\Response\SpTransferResponse;
+use TechSolutions\Mkesh\Response\TransactionStatusResponse;
 
 final class ResponseParsingTest extends TestCase
 {

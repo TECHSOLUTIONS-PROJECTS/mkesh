@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Tests\Support;
+namespace TechSolutions\Mkesh\Tests\Support;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;

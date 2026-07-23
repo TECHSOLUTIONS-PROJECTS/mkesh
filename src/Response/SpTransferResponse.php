@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BrilliantMind\Mkesh\Response;
+namespace TechSolutions\Mkesh\Response;
 
 use DOMElement;
-use BrilliantMind\Mkesh\Xml\XmlReader;
+use TechSolutions\Mkesh\Xml\XmlReader;
 
 /**
  * sptransferresponse v1.2 — returned from a B2C payout (sptransfer) request.

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use BrilliantMind\Mkesh\Enum\CallbackResponseCode;
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Enum\CallbackResponseCode;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

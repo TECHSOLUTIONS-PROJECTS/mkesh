@@ -7,13 +7,13 @@ namespace App\Services;
 use App\Jobs\ReconcileMkeshTransaction;
 use App\Models\MkeshResponse;
 use App\Models\MkeshTransaction;
-use BrilliantMind\Mkesh\Enum\TransactionStatus;
-use BrilliantMind\Mkesh\Exception\ErrorResponseException;
-use BrilliantMind\Mkesh\MkeshClient;
-use BrilliantMind\Mkesh\Request\DebitRequest;
-use BrilliantMind\Mkesh\Request\SpTransferRequest;
-use BrilliantMind\Mkesh\ValueObject\Fri;
-use BrilliantMind\Mkesh\ValueObject\Money;
+use TechSolutions\Mkesh\Enum\TransactionStatus;
+use TechSolutions\Mkesh\Exception\ErrorResponseException;
+use TechSolutions\Mkesh\MkeshClient;
+use TechSolutions\Mkesh\Request\DebitRequest;
+use TechSolutions\Mkesh\Request\SpTransferRequest;
+use TechSolutions\Mkesh\ValueObject\Fri;
+use TechSolutions\Mkesh\ValueObject\Money;
 use Illuminate\Database\Eloquent\Model;
 
 /**
