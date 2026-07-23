@@ -960,12 +960,31 @@ ErrorCodes::all();     // array<string, string>
 
 Duas migrations acompanham o pacote e correm com `php artisan migrate`.
 
+As duas tabelas usam **UUID como chave primária** (`$table->uuid('id')->primary()`),
+e a ligação `mkesh_responses.mkesh_transaction_id` é uma `foreignUuid`. Os models
+têm de usar o trait `HasUuids`, que gera o id na criação e ajusta o tipo de chave:
+
+```php
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+
+class MkeshTransaction extends Model
+{
+    use HasUuids;
+}
+```
+
+Os models de exemplo em [`examples/Laravel/`](examples/Laravel/) já vêm assim. O
+`payable_type` / `payable_id` continua a ser `nullableMorphs`, porque a chave é a
+do **seu** model — se as suas entidades também usarem UUID, troque por
+`$table->nullableUuidMorphs('payable')`.
+
 ### `mkesh_transactions` — o livro-razão
 
 A linha é criada **antes** do pedido sair, para reservar o id localmente.
 
 | Coluna | Notas |
 |--------|-------|
+| `id` | UUID, gerado pelo `HasUuids` |
 | `type` | `debit` (C2B) ou `transfer` (B2C) |
 | `external_transaction_id` | enviado no débito, único por tipo |
 | `provider_transaction_id` | enviado na transferência, único por tipo |
@@ -986,6 +1005,7 @@ o que respondeu.
 
 | Coluna | Notas |
 |--------|-------|
+| `id` | UUID, gerado pelo `HasUuids` |
 | `direction` | `inbound` (callback recebido) / `outbound` (resposta a pedido nosso) |
 | `operation` | `debitcompletedrequest`, `sptransferresponse`, `errorResponse`… |
 | `mkesh_transaction_id` | ligação ao livro-razão, quando houve correspondência |

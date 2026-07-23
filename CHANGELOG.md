@@ -7,6 +7,13 @@ versionamento segue [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### Alterado
+
+- As tabelas `mkesh_transactions` e `mkesh_responses` passam a usar **UUID como
+  chave primária** (`$table->uuid('id')->primary()`), e a ligação entre elas é
+  agora uma `foreignUuid`. Os models de exemplo usam o trait `HasUuids` e o job
+  `ReconcileMkeshTransaction` recebe o id como `string`.
+
 ## [1.0.0] — 2026-07-23
 
 Primeira versão pública, alinhada com a folha de integração

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use TechSolutions\Mkesh\Enum\CallbackResponseCode;
 use TechSolutions\Mkesh\Enum\TransactionStatus;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -16,9 +17,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * back. When a reconciliation with the provider disagrees, the raw `payload`
  * is the only thing worth arguing over.
  *
+ * @property string      $id
  * @property string      $direction
  * @property string|null $operation
- * @property int|null    $mkesh_transaction_id
+ * @property string|null $mkesh_transaction_id
  * @property string|null $external_transaction_id
  * @property string|null $reference_id
  * @property string|null $financial_transaction_id
@@ -30,6 +32,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class MkeshResponse extends Model
 {
+    use HasUuids;
+
     /** A callback the aggregator POSTed to us. */
     public const INBOUND = 'inbound';
 

@@ -17,7 +17,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('mkesh_transactions', function (Blueprint $table): void {
-            $table->id();
+            // UUID primary key: the row is created before the request goes out
+            // and its id travels to queues, logs and callbacks. A UUID can be
+            // minted client-side, does not leak volume, and stays valid across
+            // environments. Use the HasUuids trait on the Eloquent model.
+            $table->uuid('id')->primary();
 
             // 'debit' (C2B) or 'transfer' (B2C)
             $table->string('type', 16)->index();

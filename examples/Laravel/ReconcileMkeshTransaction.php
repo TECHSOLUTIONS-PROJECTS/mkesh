@@ -39,7 +39,7 @@ final class ReconcileMkeshTransaction implements ShouldQueue
     public int $tries = 8;
 
     public function __construct(
-        private readonly int $transactionId,
+        private readonly string $transactionId,
     ) {
     }
 

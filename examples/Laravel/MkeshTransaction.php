@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use TechSolutions\Mkesh\Enum\TransactionStatus;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -12,6 +13,10 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 /**
  * Example Eloquent model for the mkesh_transactions table.
  *
+ * The primary key is a UUID (see the migration): HasUuids mints it on create
+ * and switches the key type/auto-increment flags for you.
+ *
+ * @property string      $id
  * @property string      $type
  * @property string|null $external_transaction_id
  * @property string|null $provider_transaction_id
@@ -28,6 +33,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class MkeshTransaction extends Model
 {
+    use HasUuids;
+
     public const TYPE_DEBIT = 'debit';
     public const TYPE_TRANSFER = 'transfer';
 

@@ -25,7 +25,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('mkesh_responses', function (Blueprint $table): void {
-            $table->id();
+            // UUID primary key, same as mkesh_transactions.
+            $table->uuid('id')->primary();
 
             // 'inbound' (callback received) | 'outbound' (reply to our request)
             $table->string('direction', 8)->index();
@@ -36,7 +37,7 @@ return new class extends Migration {
             $table->string('operation', 64)->nullable()->index();
 
             // Link back to the ledger row, when we could match one.
-            $table->foreignId('mkesh_transaction_id')->nullable()
+            $table->foreignUuid('mkesh_transaction_id')->nullable()
                 ->constrained('mkesh_transactions')->nullOnDelete();
 
             // Ids echoed by the platform, kept denormalised so an unmatched
