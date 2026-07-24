@@ -120,6 +120,42 @@ Referência completa (ficheiro pronto a copiar em [`.env.example`](.env.example)
 | `MKESH_SP_TRANSFER_PATH` | `/sptransfer/sptransfer` | Path da transferência |
 | `MKESH_STATUS_PATH` | `/GetTransactionStatus/GetStatusSvlt` | Path da consulta |
 
+### 3.1.1 ⚠️ Armadilhas na configuração (leia antes de integrar)
+
+Estes foram os erros reais que apareceram em integrações. Evite-os:
+
+1. **Campos `FRI` levam uma FRI, NUNCA um URL.** Uma FRI tem o formato
+   `FRI:<valor>/<TIPO>` (ex.: `FRI:pagamKesh/USER`, `FRI:1360073/MM`,
+   `FRI:258823040400/MSISDN`). **Só** `MKESH_BASE_URL` e `MKESH_CALLBACK_URL`
+   levam `https://...`. Pôr um URL em `MKESH_SP_FRI` dá
+   `FRI "https://..." must start with "FRI:"`.
+
+2. **`MKESH_*_PATH` são CAMINHOS, não URLs.** `MKESH_DEBIT_PATH` é
+   `/DebitServlet/DebitSvlt`, não `https://host/DebitServlet/...`. Deixe-os
+   **vazios** para usar os defaults (o host vem de `MKESH_BASE_URL`).
+
+3. **`MKESH_SP_FRI` é FIXO — a carteira que RECEBE (creditada no C2B).** É dado
+   pelo provedor na folha de integração (ex.: `FRI:pagamKesh/USER`). **NÃO é o
+   número do cliente.** O FRI do cliente que paga (`fromfri`) é construído
+   automaticamente pelo pacote a partir do MSISDN em `DebitRequest::forCustomer()`
+   / `Fri::msisdn()` — não o ponha em lado nenhum da config.
+
+4. **`MKESH_SP_FRI` vazio impede o arranque.** Sem ele o `MkeshConfig` lança
+   `FRI "" must start with "FRI:"`. Peça-o ao provedor antes de testar.
+
+5. **`external_transaction_id` tem de ser único por TENTATIVA.** Se derivar o id
+   de uma chave estável (ex.: um `Payment` id), **junte um sufixo aleatório** por
+   tentativa, senão retentar o mesmo pagamento dá `Duplicate`/
+   `REFERENCE_ID_ALREADY_IN_USE`. Ver [secção 6.3](#63-controller-que-inicia-um-pagamento).
+
+6. **Números mKesh começam por `82` ou `83`** (9 dígitos). Valide no lado do
+   consumidor com `^(82|83)\d{7}$` antes de montar o `FRI:258.../MSISDN`.
+
+7. **A ligação `payable` aceita chaves ULID/UUID/int.** A tabela usa
+   `payable_id` como *string* (não o BIGINT do `nullableMorphs`), por isso ligar
+   um modelo com `HasUlids`/`HasUuids` funciona sem "Data truncated". Ver
+   [secção 10](#10-base-de-dados).
+
 ### 3.2 Três regras rígidas do agregador
 
 - **O prefixo é obrigatório.** Todo o `externaltransactionid` / `referenceid`
@@ -1036,10 +1072,12 @@ class MkeshTransaction extends Model
 }
 ```
 
-Os models de exemplo em [`examples/Laravel/`](examples/Laravel/) já vêm assim. O
-`payable_type` / `payable_id` continua a ser `nullableMorphs`, porque a chave é a
-do **seu** model — se as suas entidades também usarem UUID, troque por
-`$table->nullableUuidMorphs('payable')`.
+Os models de exemplo em [`examples/Laravel/`](examples/Laravel/) já vêm assim.
+
+**`payable_id` é uma STRING** (`string('payable_id')`), não o BIGINT do
+`nullableMorphs`. Assim aceita QUALQUER tipo de chave do seu model —
+auto-incremento, UUID **ou ULID** — sem `Data truncated for column 'payable_id'`.
+Não é preciso trocar nada consoante o tipo de chave.
 
 ### `mkesh_transactions` — o livro-razão
 
@@ -1133,6 +1171,10 @@ resolver um desacordo com o provedor.
 
 | Sintoma | Causa provável |
 |---------|----------------|
+| `FRI "" must start with "FRI:".` | `MKESH_SP_FRI` vazio. Peça a FRI da carteira SP ao provedor. |
+| `FRI "https://..." must start with "FRI:".` | Pôs um **URL** num campo FRI. FRI ≠ URL; o URL vai em `MKESH_BASE_URL`. |
+| `Data truncated for column 'payable_id'` | Está a usar uma migration antiga com `nullableMorphs` (BIGINT). Actualize o pacote — `payable_id` é *string*. |
+| `Duplicate` / `REFERENCE_ID_ALREADY_IN_USE` ao retentar | O `external_transaction_id` repetiu-se. Junte um **sufixo aleatório** por tentativa. |
 | O callback chega repetidamente | Não está a devolver `<ResponseCode>SUCCESS</ResponseCode>`. Um `200` vazio não chega. |
 | `REFERENCE_ID_ALREADY_IN_USE` no primeiro envio | O id foi reutilizado. Use `newTransactionId()` e grave-o antes de enviar. |
 | `TRANSACTION_NOT_FOUND` ao consultar | Consultou cedo demais, ou usou o id errado — a procura é pelo `referenceid`. |
