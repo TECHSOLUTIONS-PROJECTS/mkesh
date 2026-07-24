@@ -156,6 +156,43 @@ Estes foram os erros reais que apareceram em integrações. Evite-os:
    um modelo com `HasUlids`/`HasUuids` funciona sem "Data truncated". Ver
    [secção 10](#10-base-de-dados).
 
+### 3.1.2 As DUAS FRIs de um débito (a confusão mais comum)
+
+Um débito C2B tem **duas** FRIs, e são coisas diferentes. Veja o payload real:
+
+```xml
+<fromfri>FRI:258823040400/MSISDN</fromfri>   <!-- quem PAGA: o cliente -->
+<tofri>FRI:pagamKesh/USER</tofri>            <!-- quem RECEBE: você (o SP) -->
+```
+
+|  | `fromfri` (paga) | `tofri` = `MKESH_SP_FRI` (recebe) |
+|--|------------------|-----------------------------------|
+| **O que é** | o **cliente** que é debitado | a sua carteira de Service Provider |
+| **Valor** | `FRI:258XXXXXXXX/MSISDN` | `FRI:pagamKesh/USER` (o que o provedor der) |
+| **De onde vem** | do **número que o cliente digita** (frontend) | **fixo**, da config (`.env`) |
+| **Quem o monta** | o **SDK, automaticamente** | você, uma vez |
+
+- **`fromfri` é construído sozinho** a partir do MSISDN — nunca o ponha na
+  config. Use `Fri::msisdn($msisdn)` (ou `DebitRequest::forCustomer($msisdn, …)`):
+
+  ```php
+  // O número (ex.: "823631331") vem do frontend; o SDK compõe o FRI do cliente:
+  $msisdn = '258'.ltrim($input, '258');           // 258823631331
+  $mkesh->debit(new DebitRequest(
+      fromFri: Fri::msisdn($msisdn),              // → FRI:258823631331/MSISDN
+      amount:  Money::of('50', 'MZN'),
+      externalTransactionId: $config->newTransactionId($ref),
+      // toFri OMITIDO → o SDK usa a MKESH_SP_FRI (o tofri fixo)
+  ));
+  ```
+
+- **`MKESH_SP_FRI` (`tofri`) é FIXO** e vai no `.env`. **NÃO é o número do
+  cliente.** Se lá puser o MSISDN do cliente, está a dizer que recebe na carteira
+  do próprio cliente — errado (e em produção *todos* pagariam para esse número).
+
+> Regra mental: **o número que vem do ecrã = `fromfri` (automático)**; **a sua
+> carteira fixa = `tofri` = `MKESH_SP_FRI` (config)**.
+
 ### 3.2 Três regras rígidas do agregador
 
 - **O prefixo é obrigatório.** Todo o `externaltransactionid` / `referenceid`
