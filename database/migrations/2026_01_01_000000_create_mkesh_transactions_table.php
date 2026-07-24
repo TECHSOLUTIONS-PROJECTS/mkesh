@@ -48,8 +48,14 @@ return new class extends Migration {
             $table->string('error_code')->nullable();
             $table->text('error_message')->nullable();
 
-            // Free-form link back to whatever this payment is for
-            $table->nullableMorphs('payable');
+            // Free-form link back to whatever this payment is for.
+            // `payable_id` é STRING (não o BIGINT do nullableMorphs) para aceitar
+            // QUALQUER tipo de chave do consumidor — auto-incremento, UUID ou
+            // ULID. Com nullableMorphs (BIGINT), um payable com chave ULID/UUID
+            // dava "Data truncated for column 'payable_id'".
+            $table->string('payable_type')->nullable();
+            $table->string('payable_id')->nullable();
+            $table->index(['payable_type', 'payable_id']);
 
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
